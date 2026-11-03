@@ -45,10 +45,10 @@ button:disabled{opacity:.3;cursor:not-allowed}
 .fit{white-space:nowrap;overflow:hidden;line-height:1.45;padding:.08em 0}
 
 /* ===== 首頁 ===== */
-#home{flex-direction:column;align-items:center;justify-content:center;gap:1.3vh;padding:1.2vh 3vw}
+#home{flex-direction:column;align-items:center;justify-content:center;gap:1vh;padding:.8vh 3vw}
 #home>*{flex:none}
 .hhead{display:flex;align-items:center;justify-content:center;gap:2vw;width:94vw}
-.hhead .mascot{--m:12vh}
+.hhead .mascot{--m:10vh}
 .hhead .tiger{font-size:10vh;line-height:1;position:relative;animation:sway 2.4s ease-in-out infinite}
 #hTitle{min-width:0;font-weight:900;color:#d9483d;text-shadow:0 .6vh 0 #ffe0b8;text-align:center}
 .rules{background:#fff;border:5px solid var(--line);border-radius:3vh;padding:1vh 3vw;display:flex;flex-direction:column;gap:.2vh;max-width:94vw}
@@ -57,7 +57,7 @@ button:disabled{opacity:.3;cursor:not-allowed}
 .mini{width:4.2vh;height:4.2vh;border-radius:50%;display:inline-block;flex:none}
 .mini.g{background:radial-gradient(circle at 35% 35%,#a6f3bb,#2fa84f 60%,#1d7a36)}
 .mini.r{background:radial-gradient(circle at 35% 35%,#ffb3aa,#e2574c 60%,#a8352b)}
-.settings{background:#fffaf0;border:4px dashed #f0d39c;border-radius:3vh;padding:1vh 2vw;display:flex;flex-direction:column;gap:.8vh;width:94vw}
+.settings{background:#fffaf0;border:4px dashed #f0d39c;border-radius:3vh;padding:1vh 2vw;display:flex;flex-direction:column;gap:.5vh;width:94vw}
 .srow{display:flex;align-items:center;gap:.8vw;white-space:nowrap;overflow:hidden}
 .slabel{flex:none;font-weight:900;color:#a0622a;min-width:7.5em}
 .opt{flex:none;padding:.15em .6em;border-radius:999px;background:#fff;border:3px solid #ead6b5;font-weight:800;line-height:1.3}
@@ -364,6 +364,7 @@ body.quake{animation:quake .5s linear 2}
     <div class="srow" id="rowCount"></div>
     <div class="srow" id="rowTiger"></div>
     <div class="srow" id="rowHeart"></div>
+    <div class="srow" id="rowClass"></div>
   </div>
   <button id="startBtn" class="bigbtn"></button>
 </section>
@@ -466,7 +467,7 @@ body.quake{animation:quake .5s linear 2}
 <script id="data">
 const ZY_RAW = `吃ㄔ 飯ㄈㄢˋ 前ㄑㄧㄢˊ 小ㄒㄧㄠˇ 明ㄇㄧㄥˊ 用ㄩㄥˋ 肥ㄈㄟˊ 皂ㄗㄠˋ 洗ㄒㄧˇ 手ㄕㄡˇ 把ㄅㄚˇ 細ㄒㄧˋ 菌ㄐㄩㄣˋ 掉ㄉㄧㄠˋ 身ㄕㄣ 體ㄊㄧˇ 才ㄘㄞˊ 健ㄐㄧㄢˋ 康ㄎㄤ 時ㄕˊ 華ㄏㄨㄚˊ 大ㄉㄚˋ 聲ㄕㄥ 說ㄕㄨㄛ 話ㄏㄨㄚˋ 要ㄧㄠˋ 不ㄅㄨˋ 吵ㄔㄠˇ 到ㄉㄠˋ 別ㄅㄧㄝˊ 人ㄖㄣˊ 嘴ㄗㄨㄟˇ 巴˙ㄅㄚ 裡ㄌㄧˇ 有ㄧㄡˇ 食ㄕˊ 物ㄨˋ 美ㄇㄟˇ 一ㄧ 直ㄓˊ 先ㄒㄧㄢ 吞ㄊㄨㄣ 下ㄒㄧㄚˋ 去ㄑㄩˋ 再ㄗㄞˋ 開ㄎㄞ 口ㄎㄡˇ 安ㄢ 嚼ㄐㄩㄝˊ 慢ㄇㄢˋ 嚥ㄧㄢˋ 咬ㄧㄠˇ 肚ㄉㄨˋ 子˙ㄗ 比ㄅㄧˇ 較ㄐㄧㄠˋ 舒ㄕㄨ 服ㄈㄨˊ 完ㄨㄢˊ 桌ㄓㄨㄛ 面ㄇㄧㄢˋ 擦ㄘㄚ 乾ㄍㄢ 淨ㄐㄧㄥˋ 保ㄅㄠˇ 持ㄔˊ 整ㄓㄥˇ 潔ㄐㄧㄝˊ 家ㄐㄧㄚ 都ㄉㄡ 心ㄒㄧㄣ 喜ㄒㄧˇ 歡ㄏㄨㄢ 的˙ㄉㄜ 菜ㄘㄞˋ 丟ㄉㄧㄡ 在ㄗㄞˋ 地ㄉㄧˋ 上ㄕㄤˋ 可ㄎㄜˇ 以ㄧˇ 跟ㄍㄣ 老ㄌㄠˇ 師ㄕ 邊ㄅㄧㄢ 看ㄎㄢˋ 電ㄉㄧㄢˋ 視ㄕˋ 專ㄓㄨㄢ 知ㄓ 道ㄉㄠˋ 自ㄗˋ 己ㄐㄧˇ 飽ㄅㄠˇ 了˙ㄌㄜ 沒ㄇㄟˊ 謝ㄒㄧㄝˋ 煮ㄓㄨˇ 是ㄕˋ 禮ㄌㄧˇ 貌ㄇㄠˋ 好ㄏㄠˇ 習ㄒㄧˊ 慣ㄍㄨㄢˋ 拿ㄋㄚˊ 著˙ㄓㄜ 筷ㄎㄨㄞˋ 揮ㄏㄨㄟ 來ㄌㄞˊ 會ㄏㄨㄟˋ 打ㄉㄚˇ 很ㄏㄣˇ 危ㄨㄟˊ 險ㄒㄧㄢˇ 教ㄐㄧㄠˋ 室ㄕˋ 跑ㄆㄠˇ 坐ㄗㄨㄛˋ 噎ㄧㄝ 光ㄍㄨㄤ 浪ㄌㄤˋ 費ㄈㄟˋ 珍ㄓㄣ 惜ㄒㄧ 農ㄋㄨㄥˊ 夫ㄈㄨ 辛ㄒㄧㄣ 苦ㄎㄨˇ 噴ㄆㄣ 嚏ㄊㄧˋ 肘ㄓㄡˇ 遮ㄓㄜ 住ㄓㄨˋ 鼻ㄅㄧˊ 抓ㄓㄨㄚ 碗ㄨㄢˇ 想ㄒㄧㄤˇ 問ㄨㄣˋ 夾ㄐㄧㄚˊ 得ㄉㄜˊ 端ㄉㄨㄢ 正ㄓㄥˋ 消ㄒㄧㄠ 化ㄏㄨㄚˋ 收ㄕㄡ 放ㄈㄤˋ 回ㄏㄨㄟˊ 真ㄓㄣ 負ㄈㄨˋ 責ㄗㄜˊ 孩ㄏㄞˊ 東ㄉㄨㄥ 西ㄒㄧ 張ㄓㄤ 發ㄈㄚ 出ㄔㄨ 音ㄧㄣ 閉ㄅㄧˋ 紙ㄓˇ 巾ㄐㄧㄣ 玩ㄨㄢˊ 具ㄐㄩˋ 起ㄑㄧˇ 這ㄓㄜˋ 還ㄏㄞˊ 改ㄍㄞˇ 進ㄐㄧㄣˋ 餐ㄘㄢ 儀ㄧˊ 紅ㄏㄨㄥˊ 綠ㄌㄩˋ 燈ㄉㄥ 答ㄉㄚˊ 對ㄉㄨㄟˋ 顆ㄎㄜ 星ㄒㄧㄥ 錯ㄘㄨㄛˋ 關ㄍㄨㄢ 係ㄒㄧˋ 學ㄒㄩㄝˊ 次ㄘˋ 共ㄍㄨㄥˋ 題ㄊㄧˊ 第ㄉㄧˋ 始ㄕˇ 遊ㄧㄡˊ 戲ㄒㄧˋ 結ㄐㄧㄝˊ 果ㄍㄨㄛˇ 首ㄕㄡˇ 頁ㄧㄝˋ 棒ㄅㄤˋ 厲ㄌㄧˋ 害ㄏㄞˋ 你ㄋㄧˇ 我ㄨㄛˇ 們˙ㄇㄣ 就ㄐㄧㄡˋ 確ㄑㄩㄝˋ 案ㄢˋ 恭ㄍㄨㄥ 達ㄉㄚˊ 超ㄔㄠ 級ㄐㄧˊ 努ㄋㄨˇ 力ㄌㄧˋ 後ㄏㄡˋ 記ㄐㄧˋ 些ㄒㄧㄝ 喔ㄛ 也ㄧㄝˇ 減ㄐㄧㄢˇ 加ㄐㄧㄚ 效ㄒㄧㄠˋ 樂ㄩㄝˋ 庫ㄎㄨˋ 聽ㄊㄧㄥ 朗ㄌㄤˇ 讀ㄉㄨˊ 重ㄔㄨㄥˊ 油ㄧㄡˊ 太ㄊㄞˋ 嗨ㄏㄞ 吧˙ㄅㄚ 哇ㄨㄚ 耶ㄧㄝ 陪ㄆㄟˊ 覺ㄐㄩㄝˊ 呢˙ㄋㄜ 連ㄌㄧㄢˊ 續ㄒㄩˋ 全ㄑㄩㄢˊ 班ㄅㄢ 給ㄍㄟˇ 拍ㄆㄞ 嘻ㄒㄧ 癢ㄧㄤˇ 成ㄔㄥˊ
 乖ㄍㄨㄞ 隊ㄉㄨㄟˋ 推ㄊㄨㄟ 偷ㄊㄡ 插ㄔㄚ 公ㄍㄨㄥ 平ㄆㄧㄥˊ 排ㄆㄞˊ 最ㄗㄨㄟˋ 雞ㄐㄧ 腿ㄊㄨㄟˇ 多ㄉㄨㄛ 少ㄕㄠˇ 留ㄌㄧㄡˊ 同ㄊㄨㄥˊ 只ㄓˇ 個ㄍㄜˋ 湯ㄊㄤ 座ㄗㄨㄛˋ 位ㄨㄟˋ 走ㄗㄡˇ 灑ㄙㄚˇ 盤ㄆㄢˊ 廊ㄌㄤˊ 步ㄅㄨˋ 容ㄖㄨㄥˊ 易ㄧˋ 翻ㄈㄢ 青ㄑㄧㄥ 部ㄅㄨˋ 倒ㄉㄠˋ 營ㄧㄥˊ 養ㄧㄤˇ 每ㄇㄟˇ 樣ㄧㄤˋ 點ㄉㄧㄢˇ 肉ㄖㄡˋ 魚ㄩˊ 挑ㄊㄧㄠ 長ㄓㄤˇ 戴ㄉㄞˋ 帽ㄇㄠˋ 罩ㄓㄠˋ 頭ㄊㄡˊ 髮ㄈㄚˇ 水ㄕㄨㄟˇ 炸ㄓㄚˊ 或ㄏㄨㄛˋ 匙ㄔˊ 碰ㄆㄥˋ 廚ㄔㄨˊ 餘ㄩˊ 桶ㄊㄨㄥˇ 分ㄈㄣ 類ㄌㄟˋ 球ㄑㄧㄡˊ 媽ㄇㄚ 剩ㄕㄥˋ 垃ㄌㄜˋ 圾ㄙㄜˋ 等ㄉㄥˇ 動ㄉㄨㄥˋ 幫ㄅㄤ 忙ㄇㄤˊ 管ㄍㄨㄢˇ 它ㄊㄚ 告ㄍㄠˋ 訴ㄙㄨˋ 撿ㄐㄧㄢˇ 髒ㄗㄤ 骨ㄍㄨˇ 亂ㄌㄨㄢˋ 七ㄑㄧ 八ㄅㄚ 糟ㄗㄠ 吐ㄊㄨˇ 午ㄨˇ 間ㄐㄧㄢ 指ㄓˇ 怕ㄆㄚˋ 藏ㄘㄤˊ 抽ㄔㄡ 屜ㄊㄧˋ 臭ㄔㄡˋ 靜ㄐㄧㄥˋ 敲ㄑㄧㄠ 漱ㄕㄨˋ 牙ㄧㄚˊ 齒ㄔˇ 蛀ㄓㄨˋ 馬ㄇㄚˇ 休ㄒㄧㄡ 息ㄒㄧ 跳ㄊㄧㄠˋ 痛ㄊㄨㄥˋ 今ㄐㄧㄣ 天ㄊㄧㄢ 值ㄓˊ 日ㄖˋ 生ㄕㄥ 當ㄉㄤ 做ㄗㄨㄛˋ 事ㄕˋ 牛ㄋㄧㄡˊ 奶ㄋㄞˇ 盒ㄏㄜˊ 壓ㄧㄚ 扁ㄅㄧㄢˇ 更ㄍㄥˋ 喝ㄏㄜ 燙ㄊㄤˋ 聊ㄌㄧㄠˊ 叫ㄐㄧㄠˋ 難ㄋㄢˊ 椅ㄧˇ 靠ㄎㄠˋ 路ㄌㄨˋ 絆ㄅㄢˋ 試ㄕˋ 撞ㄓㄨㄤˋ 近ㄐㄧㄣˋ 距ㄐㄩˋ 離ㄌㄧˊ 擠ㄐㄧˇ 伍ㄨˇ 唱ㄔㄤˋ 歌ㄍㄜ 站ㄓㄢˋ 堆ㄉㄨㄟ 夠ㄍㄡˋ 虎ㄏㄨˇ
-搓ㄘㄨㄛ 背ㄅㄟˋ 縫ㄈㄥˋ 方ㄈㄤ 沖ㄔㄨㄥ 帕ㄆㄚˋ 沾ㄓㄢ 衣ㄧ 廁ㄘㄜˋ 所ㄙㄨㄛˇ 帶ㄉㄞˋ 板ㄅㄢˇ 濕ㄕ 摸ㄇㄛ 又ㄧㄡˋ 能ㄋㄥˊ 約ㄩㄝ 二ㄦˋ 十ㄕˊ 像ㄒㄧㄤˋ 顏ㄧㄢˊ 色ㄙㄜˋ 聞ㄨㄣˊ 香ㄒㄧㄤ 味ㄨㄟˋ 眼ㄧㄢˇ 睛ㄐㄧㄥ 趣ㄑㄩˋ 已ㄧˇ 經ㄐㄧㄥ 零ㄌㄧㄥˊ 誰ㄕㄟˊ 種ㄓㄨㄥˋ 暖ㄋㄨㄢˇ 酸ㄙㄨㄢ 甜ㄊㄧㄢˊ 現ㄒㄧㄢˋ 賽ㄙㄞˋ 買ㄇㄞˇ 歪ㄨㄞ 蘿ㄌㄨㄛˊ 蔔ㄅㄛ 漂ㄆㄧㄠˋ 亮ㄌㄧㄤˋ 蔬ㄕㄨ 蘋ㄆㄧㄥˊ 醜ㄔㄡˇ 嫌ㄒㄧㄢˊ 棄ㄑㄧˋ 選ㄒㄩㄢˇ 廳ㄊㄧㄥ 請ㄑㄧㄥˇ 務ㄨˋ 包ㄅㄠ 晚ㄨㄢˇ 冰ㄅㄧㄥ 箱ㄒㄧㄤ 期ㄑㄧˊ 麵ㄇㄧㄢˋ 粒ㄌㄧˋ 米ㄇㄧˇ 伯ㄅㄛˊ 皮ㄆㄧˊ 蕉ㄐㄧㄠ 變ㄅㄧㄢˋ 料ㄌㄧㄠˋ 塑ㄙㄨˋ 膠ㄐㄧㄠ 袋ㄉㄞˋ 弄ㄋㄨㄥˋ 杯ㄅㄟ 橘ㄐㄩˊ 送ㄙㄨㄥˋ 耐ㄋㄞˋ 待ㄉㄞˋ 畫ㄏㄨㄚˋ 助ㄓㄨˋ 衛ㄨㄟˋ 腳ㄐㄧㄠˇ 爸ㄅㄚˋ 火ㄏㄨㄛˇ 鍋ㄍㄨㄛ 伸ㄕㄣ 旁ㄆㄤˊ 遠ㄩㄢˇ 哪ㄋㄚˇ 往ㄨㄤˇ 停ㄊㄧㄥˊ 原ㄩㄢˊ 追ㄓㄨㄟ 愛ㄞˋ 秒ㄇㄧㄠˇ 數ㄕㄨˋ 被ㄅㄟˋ 累ㄌㄟˋ 退ㄊㄨㄟˋ 戰ㄓㄢˋ 暫ㄓㄢˋ 繼ㄐㄧˋ 差ㄔㄚ 快ㄎㄨㄞˋ 過ㄍㄨㄛˋ 主ㄓㄨˇ 速ㄙㄨˋ 度ㄉㄨˋ 部ㄅㄨˋ 外ㄨㄞˋ 表ㄅㄧㄠˇ 市ㄕˋ 場ㄔㄤˇ 胖ㄆㄤˋ 包ㄅㄠ 剛ㄍㄤ 搶ㄑㄧㄤˇ 為ㄨㄟˋ 什ㄕㄣˊ 麼˙ㄇㄜ 盛ㄔㄥˊ 番ㄈㄢ 茄ㄑㄧㄝˊ 輪ㄌㄨㄣˊ 黑ㄏㄟ 機ㄐㄧ 影ㄧㄥˇ 片ㄆㄧㄢˋ 囉˙ㄌㄨㄛ 台ㄊㄞˊ 換ㄏㄨㄢˋ 號ㄏㄠˋ 嗷ㄠˊ 嗚ㄨ 秩ㄓˋ 序ㄒㄩˋ 格ㄍㄜˊ 目ㄇㄨˋ 取ㄑㄩˇ 趁ㄔㄣˋ 氣ㄑㄧˋ 衝ㄔㄨㄥ 刺ㄘˋ 踩ㄘㄞˇ 滑ㄏㄨㄚˊ 兩ㄌㄧㄤˇ 猴ㄏㄡˊ 兔ㄊㄨˋ 法ㄈㄚˇ 贏ㄧㄥˊ`;
+搓ㄘㄨㄛ 背ㄅㄟˋ 縫ㄈㄥˋ 方ㄈㄤ 沖ㄔㄨㄥ 帕ㄆㄚˋ 沾ㄓㄢ 衣ㄧ 廁ㄘㄜˋ 所ㄙㄨㄛˇ 帶ㄉㄞˋ 板ㄅㄢˇ 濕ㄕ 摸ㄇㄛ 又ㄧㄡˋ 能ㄋㄥˊ 約ㄩㄝ 二ㄦˋ 十ㄕˊ 像ㄒㄧㄤˋ 顏ㄧㄢˊ 色ㄙㄜˋ 聞ㄨㄣˊ 香ㄒㄧㄤ 味ㄨㄟˋ 眼ㄧㄢˇ 睛ㄐㄧㄥ 趣ㄑㄩˋ 已ㄧˇ 經ㄐㄧㄥ 零ㄌㄧㄥˊ 誰ㄕㄟˊ 種ㄓㄨㄥˋ 暖ㄋㄨㄢˇ 酸ㄙㄨㄢ 甜ㄊㄧㄢˊ 現ㄒㄧㄢˋ 賽ㄙㄞˋ 買ㄇㄞˇ 歪ㄨㄞ 蘿ㄌㄨㄛˊ 蔔ㄅㄛ 漂ㄆㄧㄠˋ 亮ㄌㄧㄤˋ 蔬ㄕㄨ 蘋ㄆㄧㄥˊ 醜ㄔㄡˇ 嫌ㄒㄧㄢˊ 棄ㄑㄧˋ 選ㄒㄩㄢˇ 廳ㄊㄧㄥ 請ㄑㄧㄥˇ 務ㄨˋ 包ㄅㄠ 晚ㄨㄢˇ 冰ㄅㄧㄥ 箱ㄒㄧㄤ 期ㄑㄧˊ 麵ㄇㄧㄢˋ 粒ㄌㄧˋ 米ㄇㄧˇ 伯ㄅㄛˊ 皮ㄆㄧˊ 蕉ㄐㄧㄠ 變ㄅㄧㄢˋ 料ㄌㄧㄠˋ 塑ㄙㄨˋ 膠ㄐㄧㄠ 袋ㄉㄞˋ 弄ㄋㄨㄥˋ 杯ㄅㄟ 橘ㄐㄩˊ 送ㄙㄨㄥˋ 耐ㄋㄞˋ 待ㄉㄞˋ 畫ㄏㄨㄚˋ 助ㄓㄨˋ 衛ㄨㄟˋ 腳ㄐㄧㄠˇ 爸ㄅㄚˋ 火ㄏㄨㄛˇ 鍋ㄍㄨㄛ 伸ㄕㄣ 旁ㄆㄤˊ 遠ㄩㄢˇ 哪ㄋㄚˇ 往ㄨㄤˇ 停ㄊㄧㄥˊ 原ㄩㄢˊ 追ㄓㄨㄟ 愛ㄞˋ 秒ㄇㄧㄠˇ 數ㄕㄨˋ 被ㄅㄟˋ 累ㄌㄟˋ 退ㄊㄨㄟˋ 戰ㄓㄢˋ 暫ㄓㄢˋ 繼ㄐㄧˋ 差ㄔㄚ 快ㄎㄨㄞˋ 過ㄍㄨㄛˋ 主ㄓㄨˇ 速ㄙㄨˋ 度ㄉㄨˋ 部ㄅㄨˋ 外ㄨㄞˋ 表ㄅㄧㄠˇ 市ㄕˋ 場ㄔㄤˇ 胖ㄆㄤˋ 包ㄅㄠ 剛ㄍㄤ 搶ㄑㄧㄤˇ 為ㄨㄟˋ 什ㄕㄣˊ 麼˙ㄇㄜ 盛ㄔㄥˊ 番ㄈㄢ 茄ㄑㄧㄝˊ 輪ㄌㄨㄣˊ 黑ㄏㄟ 機ㄐㄧ 影ㄧㄥˇ 片ㄆㄧㄢˋ 囉˙ㄌㄨㄛ 台ㄊㄞˊ 換ㄏㄨㄢˋ 號ㄏㄠˋ 嗷ㄠˊ 嗚ㄨ 秩ㄓˋ 序ㄒㄩˋ 格ㄍㄜˊ 目ㄇㄨˋ 取ㄑㄩˇ 趁ㄔㄣˋ 氣ㄑㄧˋ 衝ㄔㄨㄥ 刺ㄘˋ 踩ㄘㄞˇ 滑ㄏㄨㄚˊ 兩ㄌㄧㄤˇ 猴ㄏㄡˊ 兔ㄊㄨˋ 法ㄈㄚˇ 贏ㄧㄥˊ 新ㄒㄧㄣ`;
 const ZY = {};
 ZY_RAW.split(/\s+/).filter(Boolean).forEach(t => { ZY[t[0]] = t.slice(1); });
 
@@ -629,7 +630,7 @@ const TEXT = {
   buyHeart:'用星星換到一顆愛心！',
   canBuy:'可以用星星丟香蕉皮喔！',
   listenFirst:'先聽題目',
-  classTag:'全班',
+  classTag:'全班', sClass:'班級', clsN:'第 {n} 班', drawnN:'已抽 {a}／{b}', resetDeck:'重新抽號',
   teamName:['猴子隊','兔子隊'], turn:'輪到', sMode:'玩法', modeAll:'全班一起', modeTeam:'兩隊對戰',
   teamFirst:'{t}先吃到營養午餐！', teamWin:'{t}贏了！', tie:'平手！兩隊都很棒！', loserCheer:'{t}也很棒，下次加油！',
   teamOut:'{t}的愛心用完了！', shopB:'香蕉皮', shopH:'換愛心', caller:'請上台', callNext:'換人囉', sSeat:'座號', seatOff:'不叫號',
@@ -1082,12 +1083,14 @@ const GOAL_RATE = 0.8;         // 答對 8 成題目就能走到營養午餐
 
 /* ---------- 儲存 ---------- */
 const KEY='mealTiger_';
-function store(k,v){ try{ localStorage.setItem(KEY+k, JSON.stringify(v)); }catch(e){} }
-function load(k,d){ try{ const v = localStorage.getItem(KEY+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+const MEM={};   // 瀏覽器不能存檔時，至少在這次開啟期間記得（抽號才不會重複）
+function store(k,v){ MEM[k]=JSON.parse(JSON.stringify(v)); try{ localStorage.setItem(KEY+k, JSON.stringify(v)); }catch(e){} }
+function load(k,d){ try{ const v = localStorage.getItem(KEY+k); if(v) return JSON.parse(v); }catch(e){} return (k in MEM) ? JSON.parse(JSON.stringify(MEM[k])) : d; }
 
 /* ---------- 狀態 ---------- */
-const ST = Object.assign({sfx:true,read:true,exp:true,count:20,tiger:8,hearts:5,seats:30,caller:true,teams:1,cats:CATS.map(c=>c[0])}, load('settings',{}));
-ST.bgm=false;
+const CLASS_N=14;   // 班級數
+const ST = Object.assign({sfx:true,read:true,exp:true,count:20,tiger:8,hearts:5,seats:30,caller:true,teams:1,cls:1,seatsBy:{},cats:CATS.map(c=>c[0])}, load('settings',{}));
+ST.bgm=false; ST.cls=Math.max(1,Math.min(CLASS_N,ST.cls||1));
 const DEF_IDX={}; DEFAULT_Q.forEach((q,i)=>{ DEF_IDX[q[1]]=i; });
 const defPool = () => DEFAULT_Q.map((q,i)=>({p:q[0],t:q[1],a:q[2],e:q[3],c:q[4],sk:i}));
 if(!load('v3',0)){ if(ST.tiger===15||ST.tiger>10) ST.tiger=8; store('v3',1); }
@@ -1273,7 +1276,7 @@ function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.ra
 
 /* ---------- 文字自動縮放 ---------- */
 const FITS=[
-  ['#toolbar',.03],['#hTitle',.085],['#hSub',.042],['.rule',.036],['.srow',.034],['#startBtn',.055],
+  ['#toolbar',.03],['#hTitle',.075],['#hSub',.038],['.rule',.032],['.srow',.031],['#startBtn',.05],
   ['#prog',.036],['#hearts',.038],['#qtext',.068],['#clTop',.024],['.choice',.075],['#fb1',.04],['#fb2',.035],['#nextBtn',.045],
   ['#mBubble',.036],['#eBubble',.042],['#eCong',.062],['#eTitle',.068],['#eGot',.048],['#eMsg',.04],['#againBtn',.048],['#homeBtn',.048]
 ];
@@ -1336,14 +1339,22 @@ function paintHome(){
   // 愛心
   $('#rowHeart').innerHTML='<span class="slabel">❤️ '+zy(TEXT.sHeart)+'</span>'+
     [3,5,10].map(n=>`<button class="opt ${ST.hearts===n?'on':''}" data-heart="${n}">${zy(TEXT.heartN.replace('{n}',n))}</button>`).join('')+
-    '<span style="display:inline-block;width:3vw"></span><span class="slabel" style="min-width:0">🙋 '+zy(TEXT.sSeat)+'</span>'+
+    '<span style="display:inline-block;width:3vw"></span>'+
+    `<button class="opt ${ST.caller?'':'on'}" data-calleroff="1">🙋${zy(TEXT.seatOff)}</button>`;
+  // 班級：每一班有自己的座號人數和抽號紀錄
+  ST.seats = ST.seatsBy[ST.cls] || ST.seats || 30;
+  const drawn = Math.max(0, ST.seats - drawnLeft());
+  $('#rowClass').innerHTML='<span class="slabel">🏫 '+zy(TEXT.sClass)+'</span>'+
+    `<button class="opt" data-cls="-1">－</button><span class="opt on" style="pointer-events:none">${zy(TEXT.clsN.replace('{n}',ST.cls))}</span><button class="opt" data-cls="1">＋</button>`+
+    '<span style="display:inline-block;width:2vw"></span><span class="slabel" style="min-width:0">🙋 '+zy(TEXT.sSeat)+'</span>'+
     `<button class="opt" data-seat="-1">－</button><span class="opt on" style="pointer-events:none">1～${ST.seats}</span><button class="opt" data-seat="1">＋</button>`+
-    `<button class="opt ${ST.caller?'':'on'}" data-calleroff="1">${zy(TEXT.seatOff)}</button>`;
+    `<span class="opt" style="pointer-events:none;border-style:dashed">${zy(TEXT.drawnN.replace('{a}',drawn).replace('{b}',ST.seats))}</span>`+
+    `<button class="opt" data-resetdeck="1">🔄${zy(TEXT.resetDeck)}</button>`;
   $('#startBtn').innerHTML='▶ '+zy(TEXT.start);
   saveSettings();
   requestAnimationFrame(fitAll);
 }
-function saveSettings(){ store('settings',{teams:ST.teams,sfx:ST.sfx,read:ST.read,exp:ST.exp,count:ST.count,tiger:ST.tiger,hearts:ST.hearts,seats:ST.seats,caller:ST.caller,cats:ST.cats}); }
+function saveSettings(){ store('settings',{teams:ST.teams,sfx:ST.sfx,read:ST.read,exp:ST.exp,count:ST.count,tiger:ST.tiger,hearts:ST.hearts,seats:ST.seats,caller:ST.caller,cls:ST.cls,seatsBy:ST.seatsBy,cats:ST.cats}); }
 $('.settings').addEventListener('click',e=>{
   const b=e.target.closest('.opt'); if(!b) return; sfx('click');
   if(b.dataset.cat!==undefined){
@@ -1357,7 +1368,9 @@ $('.settings').addEventListener('click',e=>{
   if(b.dataset.teams) ST.teams=+b.dataset.teams;
   if(b.dataset.tiger!==undefined) ST.tiger=+b.dataset.tiger;
   if(b.dataset.heart) ST.hearts=+b.dataset.heart;
-  if(b.dataset.seat) ST.seats=Math.max(2,Math.min(40,ST.seats+(+b.dataset.seat)));
+  if(b.dataset.seat){ ST.seats=Math.max(2,Math.min(40,ST.seats+(+b.dataset.seat))); ST.seatsBy[ST.cls]=ST.seats; }
+  if(b.dataset.cls){ ST.cls=Math.max(1,Math.min(CLASS_N,ST.cls+(+b.dataset.cls))); ST.seats=ST.seatsBy[ST.cls]||ST.seats; ST.seatsBy[ST.cls]=ST.seats; }
+  if(b.dataset.resetdeck){ dialog({title:'🔄 重新抽號',msg:'第 '+ST.cls+' 班的抽號紀錄會清除，從全班重新開始一輪。',okText:'重新抽號',onOk:()=>{ resetDecks(); paintHome(); }}); }
   if(b.dataset.calleroff) ST.caller=!ST.caller;
   paintHome();
 });
@@ -1645,11 +1658,30 @@ function caught(){
 
 /* ---------- 叫號燈：抽完一輪才重抽，換號碼跑 3 秒 ---------- */
 function seatList(){ const all=Array.from({length:ST.seats},(_,i)=>i+1); return two()? all.filter(n=>n%2===(act===0?1:0)) : all; }
-function deckKey(){ return 'deck_'+ST.seats+(two()?'_t'+act:''); }
+function deckKey(t){ const tm = t===undefined ? (two()?act:-1) : t; return 'deck_c'+ST.cls+'_n'+ST.seats+(tm>=0?'_t'+tm:''); }
+/* 這一班（全班模式）還有幾個號碼沒抽到 */
+/* 這一班、目前玩法已經抽過幾個號碼 */
+function drawnCount(){
+  const all=Array.from({length:ST.seats},(_,i)=>i+1);
+  const parts = two() ? [[0,all.filter(n=>n%2===1)],[1,all.filter(n=>n%2===0)]] : [[-1,all]];
+  return parts.reduce((sum,[t,list])=>{ const d=load(deckKey(t),null); return sum + (Array.isArray(d)&&d.length ? list.length-d.length : 0); },0);
+}
+function drawnLeft(){ return ST.seats - drawnCount(); }
+/* 開始前問老師：接著抽，還是重新抽 */
+function askThenStart(){
+  const n=drawnCount();
+  if(!ST.caller || n<=0 || n>=ST.seats){ startGame(); return; }
+  dialog({title:'🙋 第 '+ST.cls+' 班的叫號',
+    msg:'這一班已經抽過 '+n+'／'+ST.seats+' 位小朋友。要接著抽還沒上台的小朋友，還是全部重新抽？',
+    okText:'▶ 接著抽', onOk:()=>startGame(),
+    extra:[{text:'🔄 重新抽', fn:()=>{ resetDecks(); startGame(); }}]});
+}
+function resetDecks(){ [-1,0,1].forEach(t=>{ const k=deckKey(t); store(k,[]); try{ localStorage.removeItem(KEY+k); }catch(e){} delete MEM[k]; }); }
 function seatDeck(){ let d=load(deckKey(),null); if(!Array.isArray(d)||!d.length) d=shuffle(seatList()); return d; }
 function drawSeat(){ const d=seatDeck(); let n=d.pop(); if(n===curSeat && d.length){ d.unshift(n); n=d.pop(); } store(deckKey(),d); return n; }
 const pad2=n=>String(n).padStart(2,'0');
-const ROLL_MS=1200;   // 號碼跑動的時間
+const ROLL_MS=1200;
+
 function rollSeat(then){
   const el=$('#caller');
   if(!ST.caller){ el.style.display='none'; if(then) then(); return; }
@@ -1890,12 +1922,12 @@ $('#dlg').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(
 
 /* ---------- 按鈕 ---------- */
 function togglePause(){ if(cur!=='game') return; paused=!paused; if(paused) hush(); sfx('click'); paintPause(); paintTimer(); }
-$('#startBtn').onclick=()=>{ sfx('click'); startGame(); };
+$('#startBtn').onclick=()=>{ sfx('click'); askThenStart(); };
 $('#btnGood').onclick=()=>answer('好');
 $('#btnBad').onclick=()=>answer('改');
 $('#nextBtn').onclick=goNext;
 $('#listenBtn').onclick=()=>{ if(round[idx]){ if(answers[idx]) speak(round[idx].t,true); else if(!calling) readQuestion(true); } };
-$('#againBtn').onclick=()=>{ sfx('click'); startGame(); };
+$('#againBtn').onclick=()=>{ sfx('click'); askThenStart(); };
 $('#homeBtn').onclick=()=>{ sfx('click'); show('home'); };
 $('#tbPause').onclick=togglePause;
 $('#pauseVeil').onclick=togglePause;
@@ -1972,7 +2004,7 @@ $('#tbHome').onclick=()=>{ sfx('click');
   else show('home'); };
 document.addEventListener('keydown',e=>{
   if($('#modal').classList.contains('on') || $('#dlg').classList.contains('on')) return;
-  if(cur==='home' && e.key==='Enter'){ startGame(); return; }
+  if(cur==='home' && e.key==='Enter'){ askThenStart(); return; }
   if(cur!=='game') return;
   if(e.key===' '){ e.preventDefault(); togglePause(); }
   else if(e.key==='1') answer('好');
@@ -1986,7 +2018,7 @@ document.addEventListener('keydown',e=>{
 /* ---------- 開始 ---------- */
 paintStatic(); show('home');
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
-window.__mealGame={ get state(){ return {act,teams:TEAMS.length,T:TEAMS.map((t,i)=>({tiger:V(i).tigerPos,hearts:V(i).hearts,kid:kidPosOf(i),stars:starsOf(i)})),undo:undoStack.map(r=>r.caught),cur,idx,answers,round,bonus,stars:totalStars(),tigerPos,kid:kidPos(),goal,hearts,reached,reading,paused}; },
+window.__mealGame={ drawOne:()=>{ const n=drawSeat(); curSeat=n; return n; }, draw:(m)=>{ const saved=ST.teams; ST.teams=m||1; const out=[]; for(let i=0;i<ST.seats*2;i++){ const n=drawSeat(); curSeat=n; out.push(n); } ST.teams=saved; return out; }, get state(){ return {act,teams:TEAMS.length,T:TEAMS.map((t,i)=>({tiger:V(i).tigerPos,hearts:V(i).hearts,kid:kidPosOf(i),stars:starsOf(i)})),undo:undoStack.map(r=>r.caught),cur,idx,answers,round,bonus,stars:totalStars(),tigerPos,kid:kidPos(),goal,hearts,reached,reading,paused}; },
   zy, missingZy, pool:()=>pool, setTigerAcc:v=>{tigerAcc=v;}, tigerStep:()=>tigerStep() };
 })();
 </script>
