@@ -286,6 +286,26 @@ body.quake{animation:quake .5s linear 2}
 .mrow button{padding:8px 18px;border-radius:10px;background:#f2e6d2;font-size:16px;font-weight:700}
 .mrow button.primary{background:var(--orange);color:#fff}
 #dlg{z-index:12}
+#seatPanel{z-index:11}
+.sp{width:min(1100px,94vw)}
+.sphead{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+#spSum{font-size:18px;font-weight:800;color:#a0622a}
+.splegend{margin:6px 0 10px}
+.sl{display:inline-block;padding:2px 10px;border-radius:8px;margin-right:6px;font-weight:700;font-size:13px}
+.sl.todo{background:#fff;border:3px solid #ff9f43;color:#a0622a}
+.sl.done{background:#e8e3da;border:3px solid #d2c8b6;color:#8a7d6a}
+.sl.now{background:#ffe082;border:3px solid #f2a81d;color:#7a4b00}
+#spGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px}
+.seatb{position:relative;border-radius:12px;padding:6px 4px 4px;text-align:center;font-weight:900;font-size:26px;line-height:1.1;background:#fff;border:4px solid #ff9f43;color:#7a4b00}
+.seatb small{display:block;font-size:12px;font-weight:700;min-height:15px;color:#8a7464;white-space:nowrap;overflow:hidden}
+.seatb.done{background:#efeae1;border-color:#d8cebd;color:#9a8e7c}
+.seatb.done::after{content:"✓";position:absolute;right:6px;top:2px;font-size:16px;color:#7cb342}
+.seatb.now{background:#ffe082;border-color:#f2a81d;color:#7a4b00}
+.seatb.note::before{content:"📝";position:absolute;left:5px;top:3px;font-size:13px}
+.seatb .tm{position:absolute;left:4px;bottom:2px;font-size:12px}
+#dlgMsg{white-space:pre-line}
+#tbSeats .cnt{font-size:.85em;font-weight:800;color:#a0622a;margin-left:.2em}
+#eNext{font-weight:800;color:#a0622a;text-align:center;max-width:92vw}
 .dlgp{width:min(720px,92vw);font-size:20px}
 .dlgp h2{font-size:28px}
 .dlgp p{font-size:20px;color:#5b4636}
@@ -341,6 +361,7 @@ body.quake{animation:quake .5s linear 2}
   <button class="tb" id="tbBgm"></button>
   <button class="tb" id="tbRead"></button>
   <button class="tb" id="tbExp"></button>
+  <button class="tb" id="tbSeats" title="老師用：看誰已經上台、誰還沒（鍵盤 S）"></button>
   <button class="tb" id="tbBank"></button>
   <button class="tb" id="tbHome"></button>
 </div>
@@ -422,6 +443,7 @@ body.quake{animation:quake .5s linear 2}
   <div id="eGot" class="fit"></div>
   <div class="estars" id="eStars"></div>
   <div id="eMsg" class="fit"></div>
+  <div id="eNext" class="fit"></div>
   <div class="erow">
     <button class="bigbtn" id="againBtn"></button>
     <button class="bigbtn alt" id="homeBtn"></button>
@@ -432,6 +454,16 @@ body.quake{animation:quake .5s linear 2}
 <div id="vignette"></div>
 <div id="fx"></div>
 <input type="file" id="photoIn" accept="image/*" style="display:none">
+
+<!-- 叫號表（老師用） -->
+<div class="modal" id="seatPanel">
+  <div class="panel sp">
+    <div class="sphead"><h2 id="spTitle"></h2><span id="spSum"></span></div>
+    <p class="splegend"><span class="sl todo">還沒上台</span><span class="sl done">已上台 ✓</span><span class="sl now">現在台上</span>　點號碼可以：請他上台、看紀錄、寫評語</p>
+    <div id="spGrid"></div>
+    <div class="mrow"><button class="primary" id="spClose">關閉</button><button id="spExport">⬇️ 匯出這班紀錄（Excel）</button></div>
+  </div>
+</div>
 
 <!-- 內建對話框（取代瀏覽器跳出視窗，在預覽畫面也能用） -->
 <div class="modal" id="dlg">
@@ -467,7 +499,7 @@ body.quake{animation:quake .5s linear 2}
 <script id="data">
 const ZY_RAW = `吃ㄔ 飯ㄈㄢˋ 前ㄑㄧㄢˊ 小ㄒㄧㄠˇ 明ㄇㄧㄥˊ 用ㄩㄥˋ 肥ㄈㄟˊ 皂ㄗㄠˋ 洗ㄒㄧˇ 手ㄕㄡˇ 把ㄅㄚˇ 細ㄒㄧˋ 菌ㄐㄩㄣˋ 掉ㄉㄧㄠˋ 身ㄕㄣ 體ㄊㄧˇ 才ㄘㄞˊ 健ㄐㄧㄢˋ 康ㄎㄤ 時ㄕˊ 華ㄏㄨㄚˊ 大ㄉㄚˋ 聲ㄕㄥ 說ㄕㄨㄛ 話ㄏㄨㄚˋ 要ㄧㄠˋ 不ㄅㄨˋ 吵ㄔㄠˇ 到ㄉㄠˋ 別ㄅㄧㄝˊ 人ㄖㄣˊ 嘴ㄗㄨㄟˇ 巴˙ㄅㄚ 裡ㄌㄧˇ 有ㄧㄡˇ 食ㄕˊ 物ㄨˋ 美ㄇㄟˇ 一ㄧ 直ㄓˊ 先ㄒㄧㄢ 吞ㄊㄨㄣ 下ㄒㄧㄚˋ 去ㄑㄩˋ 再ㄗㄞˋ 開ㄎㄞ 口ㄎㄡˇ 安ㄢ 嚼ㄐㄩㄝˊ 慢ㄇㄢˋ 嚥ㄧㄢˋ 咬ㄧㄠˇ 肚ㄉㄨˋ 子˙ㄗ 比ㄅㄧˇ 較ㄐㄧㄠˋ 舒ㄕㄨ 服ㄈㄨˊ 完ㄨㄢˊ 桌ㄓㄨㄛ 面ㄇㄧㄢˋ 擦ㄘㄚ 乾ㄍㄢ 淨ㄐㄧㄥˋ 保ㄅㄠˇ 持ㄔˊ 整ㄓㄥˇ 潔ㄐㄧㄝˊ 家ㄐㄧㄚ 都ㄉㄡ 心ㄒㄧㄣ 喜ㄒㄧˇ 歡ㄏㄨㄢ 的˙ㄉㄜ 菜ㄘㄞˋ 丟ㄉㄧㄡ 在ㄗㄞˋ 地ㄉㄧˋ 上ㄕㄤˋ 可ㄎㄜˇ 以ㄧˇ 跟ㄍㄣ 老ㄌㄠˇ 師ㄕ 邊ㄅㄧㄢ 看ㄎㄢˋ 電ㄉㄧㄢˋ 視ㄕˋ 專ㄓㄨㄢ 知ㄓ 道ㄉㄠˋ 自ㄗˋ 己ㄐㄧˇ 飽ㄅㄠˇ 了˙ㄌㄜ 沒ㄇㄟˊ 謝ㄒㄧㄝˋ 煮ㄓㄨˇ 是ㄕˋ 禮ㄌㄧˇ 貌ㄇㄠˋ 好ㄏㄠˇ 習ㄒㄧˊ 慣ㄍㄨㄢˋ 拿ㄋㄚˊ 著˙ㄓㄜ 筷ㄎㄨㄞˋ 揮ㄏㄨㄟ 來ㄌㄞˊ 會ㄏㄨㄟˋ 打ㄉㄚˇ 很ㄏㄣˇ 危ㄨㄟˊ 險ㄒㄧㄢˇ 教ㄐㄧㄠˋ 室ㄕˋ 跑ㄆㄠˇ 坐ㄗㄨㄛˋ 噎ㄧㄝ 光ㄍㄨㄤ 浪ㄌㄤˋ 費ㄈㄟˋ 珍ㄓㄣ 惜ㄒㄧ 農ㄋㄨㄥˊ 夫ㄈㄨ 辛ㄒㄧㄣ 苦ㄎㄨˇ 噴ㄆㄣ 嚏ㄊㄧˋ 肘ㄓㄡˇ 遮ㄓㄜ 住ㄓㄨˋ 鼻ㄅㄧˊ 抓ㄓㄨㄚ 碗ㄨㄢˇ 想ㄒㄧㄤˇ 問ㄨㄣˋ 夾ㄐㄧㄚˊ 得ㄉㄜˊ 端ㄉㄨㄢ 正ㄓㄥˋ 消ㄒㄧㄠ 化ㄏㄨㄚˋ 收ㄕㄡ 放ㄈㄤˋ 回ㄏㄨㄟˊ 真ㄓㄣ 負ㄈㄨˋ 責ㄗㄜˊ 孩ㄏㄞˊ 東ㄉㄨㄥ 西ㄒㄧ 張ㄓㄤ 發ㄈㄚ 出ㄔㄨ 音ㄧㄣ 閉ㄅㄧˋ 紙ㄓˇ 巾ㄐㄧㄣ 玩ㄨㄢˊ 具ㄐㄩˋ 起ㄑㄧˇ 這ㄓㄜˋ 還ㄏㄞˊ 改ㄍㄞˇ 進ㄐㄧㄣˋ 餐ㄘㄢ 儀ㄧˊ 紅ㄏㄨㄥˊ 綠ㄌㄩˋ 燈ㄉㄥ 答ㄉㄚˊ 對ㄉㄨㄟˋ 顆ㄎㄜ 星ㄒㄧㄥ 錯ㄘㄨㄛˋ 關ㄍㄨㄢ 係ㄒㄧˋ 學ㄒㄩㄝˊ 次ㄘˋ 共ㄍㄨㄥˋ 題ㄊㄧˊ 第ㄉㄧˋ 始ㄕˇ 遊ㄧㄡˊ 戲ㄒㄧˋ 結ㄐㄧㄝˊ 果ㄍㄨㄛˇ 首ㄕㄡˇ 頁ㄧㄝˋ 棒ㄅㄤˋ 厲ㄌㄧˋ 害ㄏㄞˋ 你ㄋㄧˇ 我ㄨㄛˇ 們˙ㄇㄣ 就ㄐㄧㄡˋ 確ㄑㄩㄝˋ 案ㄢˋ 恭ㄍㄨㄥ 達ㄉㄚˊ 超ㄔㄠ 級ㄐㄧˊ 努ㄋㄨˇ 力ㄌㄧˋ 後ㄏㄡˋ 記ㄐㄧˋ 些ㄒㄧㄝ 喔ㄛ 也ㄧㄝˇ 減ㄐㄧㄢˇ 加ㄐㄧㄚ 效ㄒㄧㄠˋ 樂ㄩㄝˋ 庫ㄎㄨˋ 聽ㄊㄧㄥ 朗ㄌㄤˇ 讀ㄉㄨˊ 重ㄔㄨㄥˊ 油ㄧㄡˊ 太ㄊㄞˋ 嗨ㄏㄞ 吧˙ㄅㄚ 哇ㄨㄚ 耶ㄧㄝ 陪ㄆㄟˊ 覺ㄐㄩㄝˊ 呢˙ㄋㄜ 連ㄌㄧㄢˊ 續ㄒㄩˋ 全ㄑㄩㄢˊ 班ㄅㄢ 給ㄍㄟˇ 拍ㄆㄞ 嘻ㄒㄧ 癢ㄧㄤˇ 成ㄔㄥˊ
 乖ㄍㄨㄞ 隊ㄉㄨㄟˋ 推ㄊㄨㄟ 偷ㄊㄡ 插ㄔㄚ 公ㄍㄨㄥ 平ㄆㄧㄥˊ 排ㄆㄞˊ 最ㄗㄨㄟˋ 雞ㄐㄧ 腿ㄊㄨㄟˇ 多ㄉㄨㄛ 少ㄕㄠˇ 留ㄌㄧㄡˊ 同ㄊㄨㄥˊ 只ㄓˇ 個ㄍㄜˋ 湯ㄊㄤ 座ㄗㄨㄛˋ 位ㄨㄟˋ 走ㄗㄡˇ 灑ㄙㄚˇ 盤ㄆㄢˊ 廊ㄌㄤˊ 步ㄅㄨˋ 容ㄖㄨㄥˊ 易ㄧˋ 翻ㄈㄢ 青ㄑㄧㄥ 部ㄅㄨˋ 倒ㄉㄠˋ 營ㄧㄥˊ 養ㄧㄤˇ 每ㄇㄟˇ 樣ㄧㄤˋ 點ㄉㄧㄢˇ 肉ㄖㄡˋ 魚ㄩˊ 挑ㄊㄧㄠ 長ㄓㄤˇ 戴ㄉㄞˋ 帽ㄇㄠˋ 罩ㄓㄠˋ 頭ㄊㄡˊ 髮ㄈㄚˇ 水ㄕㄨㄟˇ 炸ㄓㄚˊ 或ㄏㄨㄛˋ 匙ㄔˊ 碰ㄆㄥˋ 廚ㄔㄨˊ 餘ㄩˊ 桶ㄊㄨㄥˇ 分ㄈㄣ 類ㄌㄟˋ 球ㄑㄧㄡˊ 媽ㄇㄚ 剩ㄕㄥˋ 垃ㄌㄜˋ 圾ㄙㄜˋ 等ㄉㄥˇ 動ㄉㄨㄥˋ 幫ㄅㄤ 忙ㄇㄤˊ 管ㄍㄨㄢˇ 它ㄊㄚ 告ㄍㄠˋ 訴ㄙㄨˋ 撿ㄐㄧㄢˇ 髒ㄗㄤ 骨ㄍㄨˇ 亂ㄌㄨㄢˋ 七ㄑㄧ 八ㄅㄚ 糟ㄗㄠ 吐ㄊㄨˇ 午ㄨˇ 間ㄐㄧㄢ 指ㄓˇ 怕ㄆㄚˋ 藏ㄘㄤˊ 抽ㄔㄡ 屜ㄊㄧˋ 臭ㄔㄡˋ 靜ㄐㄧㄥˋ 敲ㄑㄧㄠ 漱ㄕㄨˋ 牙ㄧㄚˊ 齒ㄔˇ 蛀ㄓㄨˋ 馬ㄇㄚˇ 休ㄒㄧㄡ 息ㄒㄧ 跳ㄊㄧㄠˋ 痛ㄊㄨㄥˋ 今ㄐㄧㄣ 天ㄊㄧㄢ 值ㄓˊ 日ㄖˋ 生ㄕㄥ 當ㄉㄤ 做ㄗㄨㄛˋ 事ㄕˋ 牛ㄋㄧㄡˊ 奶ㄋㄞˇ 盒ㄏㄜˊ 壓ㄧㄚ 扁ㄅㄧㄢˇ 更ㄍㄥˋ 喝ㄏㄜ 燙ㄊㄤˋ 聊ㄌㄧㄠˊ 叫ㄐㄧㄠˋ 難ㄋㄢˊ 椅ㄧˇ 靠ㄎㄠˋ 路ㄌㄨˋ 絆ㄅㄢˋ 試ㄕˋ 撞ㄓㄨㄤˋ 近ㄐㄧㄣˋ 距ㄐㄩˋ 離ㄌㄧˊ 擠ㄐㄧˇ 伍ㄨˇ 唱ㄔㄤˋ 歌ㄍㄜ 站ㄓㄢˋ 堆ㄉㄨㄟ 夠ㄍㄡˋ 虎ㄏㄨˇ
-搓ㄘㄨㄛ 背ㄅㄟˋ 縫ㄈㄥˋ 方ㄈㄤ 沖ㄔㄨㄥ 帕ㄆㄚˋ 沾ㄓㄢ 衣ㄧ 廁ㄘㄜˋ 所ㄙㄨㄛˇ 帶ㄉㄞˋ 板ㄅㄢˇ 濕ㄕ 摸ㄇㄛ 又ㄧㄡˋ 能ㄋㄥˊ 約ㄩㄝ 二ㄦˋ 十ㄕˊ 像ㄒㄧㄤˋ 顏ㄧㄢˊ 色ㄙㄜˋ 聞ㄨㄣˊ 香ㄒㄧㄤ 味ㄨㄟˋ 眼ㄧㄢˇ 睛ㄐㄧㄥ 趣ㄑㄩˋ 已ㄧˇ 經ㄐㄧㄥ 零ㄌㄧㄥˊ 誰ㄕㄟˊ 種ㄓㄨㄥˋ 暖ㄋㄨㄢˇ 酸ㄙㄨㄢ 甜ㄊㄧㄢˊ 現ㄒㄧㄢˋ 賽ㄙㄞˋ 買ㄇㄞˇ 歪ㄨㄞ 蘿ㄌㄨㄛˊ 蔔ㄅㄛ 漂ㄆㄧㄠˋ 亮ㄌㄧㄤˋ 蔬ㄕㄨ 蘋ㄆㄧㄥˊ 醜ㄔㄡˇ 嫌ㄒㄧㄢˊ 棄ㄑㄧˋ 選ㄒㄩㄢˇ 廳ㄊㄧㄥ 請ㄑㄧㄥˇ 務ㄨˋ 包ㄅㄠ 晚ㄨㄢˇ 冰ㄅㄧㄥ 箱ㄒㄧㄤ 期ㄑㄧˊ 麵ㄇㄧㄢˋ 粒ㄌㄧˋ 米ㄇㄧˇ 伯ㄅㄛˊ 皮ㄆㄧˊ 蕉ㄐㄧㄠ 變ㄅㄧㄢˋ 料ㄌㄧㄠˋ 塑ㄙㄨˋ 膠ㄐㄧㄠ 袋ㄉㄞˋ 弄ㄋㄨㄥˋ 杯ㄅㄟ 橘ㄐㄩˊ 送ㄙㄨㄥˋ 耐ㄋㄞˋ 待ㄉㄞˋ 畫ㄏㄨㄚˋ 助ㄓㄨˋ 衛ㄨㄟˋ 腳ㄐㄧㄠˇ 爸ㄅㄚˋ 火ㄏㄨㄛˇ 鍋ㄍㄨㄛ 伸ㄕㄣ 旁ㄆㄤˊ 遠ㄩㄢˇ 哪ㄋㄚˇ 往ㄨㄤˇ 停ㄊㄧㄥˊ 原ㄩㄢˊ 追ㄓㄨㄟ 愛ㄞˋ 秒ㄇㄧㄠˇ 數ㄕㄨˋ 被ㄅㄟˋ 累ㄌㄟˋ 退ㄊㄨㄟˋ 戰ㄓㄢˋ 暫ㄓㄢˋ 繼ㄐㄧˋ 差ㄔㄚ 快ㄎㄨㄞˋ 過ㄍㄨㄛˋ 主ㄓㄨˇ 速ㄙㄨˋ 度ㄉㄨˋ 部ㄅㄨˋ 外ㄨㄞˋ 表ㄅㄧㄠˇ 市ㄕˋ 場ㄔㄤˇ 胖ㄆㄤˋ 包ㄅㄠ 剛ㄍㄤ 搶ㄑㄧㄤˇ 為ㄨㄟˋ 什ㄕㄣˊ 麼˙ㄇㄜ 盛ㄔㄥˊ 番ㄈㄢ 茄ㄑㄧㄝˊ 輪ㄌㄨㄣˊ 黑ㄏㄟ 機ㄐㄧ 影ㄧㄥˇ 片ㄆㄧㄢˋ 囉˙ㄌㄨㄛ 台ㄊㄞˊ 換ㄏㄨㄢˋ 號ㄏㄠˋ 嗷ㄠˊ 嗚ㄨ 秩ㄓˋ 序ㄒㄩˋ 格ㄍㄜˊ 目ㄇㄨˋ 取ㄑㄩˇ 趁ㄔㄣˋ 氣ㄑㄧˋ 衝ㄔㄨㄥ 刺ㄘˋ 踩ㄘㄞˇ 滑ㄏㄨㄚˊ 兩ㄌㄧㄤˇ 猴ㄏㄡˊ 兔ㄊㄨˋ 法ㄈㄚˇ 贏ㄧㄥˊ 新ㄒㄧㄣ`;
+搓ㄘㄨㄛ 背ㄅㄟˋ 縫ㄈㄥˋ 方ㄈㄤ 沖ㄔㄨㄥ 帕ㄆㄚˋ 沾ㄓㄢ 衣ㄧ 廁ㄘㄜˋ 所ㄙㄨㄛˇ 帶ㄉㄞˋ 板ㄅㄢˇ 濕ㄕ 摸ㄇㄛ 又ㄧㄡˋ 能ㄋㄥˊ 約ㄩㄝ 二ㄦˋ 十ㄕˊ 像ㄒㄧㄤˋ 顏ㄧㄢˊ 色ㄙㄜˋ 聞ㄨㄣˊ 香ㄒㄧㄤ 味ㄨㄟˋ 眼ㄧㄢˇ 睛ㄐㄧㄥ 趣ㄑㄩˋ 已ㄧˇ 經ㄐㄧㄥ 零ㄌㄧㄥˊ 誰ㄕㄟˊ 種ㄓㄨㄥˋ 暖ㄋㄨㄢˇ 酸ㄙㄨㄢ 甜ㄊㄧㄢˊ 現ㄒㄧㄢˋ 賽ㄙㄞˋ 買ㄇㄞˇ 歪ㄨㄞ 蘿ㄌㄨㄛˊ 蔔ㄅㄛ 漂ㄆㄧㄠˋ 亮ㄌㄧㄤˋ 蔬ㄕㄨ 蘋ㄆㄧㄥˊ 醜ㄔㄡˇ 嫌ㄒㄧㄢˊ 棄ㄑㄧˋ 選ㄒㄩㄢˇ 廳ㄊㄧㄥ 請ㄑㄧㄥˇ 務ㄨˋ 包ㄅㄠ 晚ㄨㄢˇ 冰ㄅㄧㄥ 箱ㄒㄧㄤ 期ㄑㄧˊ 麵ㄇㄧㄢˋ 粒ㄌㄧˋ 米ㄇㄧˇ 伯ㄅㄛˊ 皮ㄆㄧˊ 蕉ㄐㄧㄠ 變ㄅㄧㄢˋ 料ㄌㄧㄠˋ 塑ㄙㄨˋ 膠ㄐㄧㄠ 袋ㄉㄞˋ 弄ㄋㄨㄥˋ 杯ㄅㄟ 橘ㄐㄩˊ 送ㄙㄨㄥˋ 耐ㄋㄞˋ 待ㄉㄞˋ 畫ㄏㄨㄚˋ 助ㄓㄨˋ 衛ㄨㄟˋ 腳ㄐㄧㄠˇ 爸ㄅㄚˋ 火ㄏㄨㄛˇ 鍋ㄍㄨㄛ 伸ㄕㄣ 旁ㄆㄤˊ 遠ㄩㄢˇ 哪ㄋㄚˇ 往ㄨㄤˇ 停ㄊㄧㄥˊ 原ㄩㄢˊ 追ㄓㄨㄟ 愛ㄞˋ 秒ㄇㄧㄠˇ 數ㄕㄨˋ 被ㄅㄟˋ 累ㄌㄟˋ 退ㄊㄨㄟˋ 戰ㄓㄢˋ 暫ㄓㄢˋ 繼ㄐㄧˋ 差ㄔㄚ 快ㄎㄨㄞˋ 過ㄍㄨㄛˋ 主ㄓㄨˇ 速ㄙㄨˋ 度ㄉㄨˋ 部ㄅㄨˋ 外ㄨㄞˋ 表ㄅㄧㄠˇ 市ㄕˋ 場ㄔㄤˇ 胖ㄆㄤˋ 包ㄅㄠ 剛ㄍㄤ 搶ㄑㄧㄤˇ 為ㄨㄟˋ 什ㄕㄣˊ 麼˙ㄇㄜ 盛ㄔㄥˊ 番ㄈㄢ 茄ㄑㄧㄝˊ 輪ㄌㄨㄣˊ 黑ㄏㄟ 機ㄐㄧ 影ㄧㄥˇ 片ㄆㄧㄢˋ 囉˙ㄌㄨㄛ 台ㄊㄞˊ 換ㄏㄨㄢˋ 號ㄏㄠˋ 嗷ㄠˊ 嗚ㄨ 秩ㄓˋ 序ㄒㄩˋ 格ㄍㄜˊ 目ㄇㄨˋ 取ㄑㄩˇ 趁ㄔㄣˋ 氣ㄑㄧˋ 衝ㄔㄨㄥ 刺ㄘˋ 踩ㄘㄞˇ 滑ㄏㄨㄚˊ 兩ㄌㄧㄤˇ 猴ㄏㄡˊ 兔ㄊㄨˋ 法ㄈㄚˇ 贏ㄧㄥˊ 新ㄒㄧㄣ 喔ㄛ`;
 const ZY = {};
 ZY_RAW.split(/\s+/).filter(Boolean).forEach(t => { ZY[t[0]] = t.slice(1); });
 
@@ -630,6 +662,7 @@ const TEXT = {
   buyHeart:'用星星換到一顆愛心！',
   canBuy:'可以用星星丟香蕉皮喔！',
   listenFirst:'先聽題目',
+  seatsBtn:'叫號表', nextFirst:'下次會先請 {s} 號上台喔！', allDone:'全班都上台過了，大家都好棒！',
   classTag:'全班', sClass:'班級', clsN:'第 {n} 班', drawnN:'已抽 {a}／{b}', resetDeck:'重新抽號',
   teamName:['猴子隊','兔子隊'], turn:'輪到', sMode:'玩法', modeAll:'全班一起', modeTeam:'兩隊對戰',
   teamFirst:'{t}先吃到營養午餐！', teamWin:'{t}贏了！', tie:'平手！兩隊都很棒！', loserCheer:'{t}也很棒，下次加油！',
@@ -1278,7 +1311,7 @@ function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.ra
 const FITS=[
   ['#toolbar',.03],['#hTitle',.075],['#hSub',.038],['.rule',.032],['.srow',.031],['#startBtn',.05],
   ['#prog',.036],['#hearts',.038],['#qtext',.068],['#clTop',.024],['.choice',.075],['#fb1',.04],['#fb2',.035],['#nextBtn',.045],
-  ['#mBubble',.036],['#eBubble',.042],['#eCong',.062],['#eTitle',.068],['#eGot',.048],['#eMsg',.04],['#againBtn',.048],['#homeBtn',.048]
+  ['#mBubble',.036],['#eBubble',.042],['#eCong',.062],['#eTitle',.068],['#eGot',.048],['#eMsg',.04],['#eNext',.036],['#againBtn',.048],['#homeBtn',.048]
 ];
 function fitEl(el,base){ const min=el.id==='toolbar'?8:11; let s=Math.max(min,Math.round(innerHeight*base)); el.style.fontSize=s+'px'; let g=0;
   while(el.scrollWidth>el.clientWidth+1 && s>min && g++<200){ s-=1; el.style.fontSize=s+'px'; } }
@@ -1350,7 +1383,7 @@ function paintHome(){
     `<button class="opt" data-seat="-1">－</button><span class="opt on" style="pointer-events:none">1～${ST.seats}</span><button class="opt" data-seat="1">＋</button>`+
     `<span class="opt" style="pointer-events:none;border-style:dashed">${zy(TEXT.drawnN.replace('{a}',drawn).replace('{b}',ST.seats))}</span>`+
     `<button class="opt" data-resetdeck="1">🔄${zy(TEXT.resetDeck)}</button>`;
-  $('#startBtn').innerHTML='▶ '+zy(TEXT.start);
+  $('#startBtn').innerHTML='▶ '+zy(TEXT.start); paintSeatBtn();
   saveSettings();
   requestAnimationFrame(fitAll);
 }
@@ -1393,6 +1426,7 @@ function paintStatic(){
   $('#tbRead').innerHTML='<span class="ic">🗣️</span>'+zy(T.read);
   $('#tbExp').innerHTML='<span class="ic">💡</span>'+zy(T.exp);
   $('#tbBank').innerHTML='<span class="ic">✏️</span>'+zy(T.bank);
+  paintSeatBtn();
   $('#tbHome').innerHTML='<span class="ic">🏠</span>'+zy(T.home);
   $('#tbTiger').innerHTML='<span class="ic">🐯</span>'+zy(T.order);
   $('#tbUndo').innerHTML='<span class="ic">🐯⬅️</span>'+zy(T.undo);
@@ -1537,7 +1571,8 @@ function render(speakIt){
 function answer(pick){
   if(cur!=='game'||answers[idx]||paused||ending||rolling||calling) return;
   const q=round[idx], ok=pick===q.a;
-  answers[idx]={team:act,pick,ok,msg:ok?pickNR(TEXT.okMsg,'ok'):pickNR(TEXT.noMsg,'no')};
+  answers[idx]={team:act,seat:(ST.caller?curSeat:null),pick,ok,msg:ok?pickNR(TEXT.okMsg,'ok'):pickNR(TEXT.noMsg,'no')};
+  if(answers[idx].seat) answers[idx].logId=logAnswer(answers[idx].seat,q,ok);
   qToken++; reading=false; clearTimeout(readTimer);
   applyResult(true);
   if(!ok && ST.tiger>0 && !reached){
@@ -1605,12 +1640,12 @@ function goNext(){
 }
 function goPrev(){ if(cur!=='game'||idx===0||ending) return; sfx('click'); idx--; hush(); stopCalling(); reading=false; render(false); }
 function stopCalling(){ qToken++; calling=false; rolling=false; clearInterval(rollTimer); clearTimeout(readTimer); $('#caller').classList.remove('rolling'); if(curSeat){ $('#clNum').textContent=pad2(curSeat); $('#clTop').innerHTML='🙋 '+zy(TEXT.caller); } }
-function redo(){ if(cur!=='game'||!answers[idx]||ending) return; if(answers[idx].wrec) revertRec(answers[idx].wrec); answers[idx]=null; reached=kidPos()>=goal && reached; if(kidPos()<goal) reached=false; sfx('click'); render(false); }
+function redo(){ if(cur!=='game'||!answers[idx]||ending) return; if(answers[idx].logId) unlogAnswer(answers[idx].seat,answers[idx].logId); if(answers[idx].wrec) revertRec(answers[idx].wrec); answers[idx]=null; reached=kidPos()>=goal && reached; if(kidPos()<goal) reached=false; sfx('click'); render(false); }
 
 /* ---------- 虎媽媽計時（念題目、看說明、暫停時都不動） ---------- */
 function tigerActive(){
   return cur==='game' && ST.tiger>0 && round[idx] && !answers[idx] && !paused && !reading && !rolling && !ending && !reached
-    && !$('#modal').classList.contains('on') && !$('#dlg').classList.contains('on') && !document.hidden;
+    && !$('#modal').classList.contains('on') && !$('#dlg').classList.contains('on') && !$('#seatPanel').classList.contains('on') && !document.hidden;
 }
 setInterval(()=>{
   if(cur!=='game') return;
@@ -1664,9 +1699,17 @@ function deckKey(t){ const tm = t===undefined ? (two()?act:-1) : t; return 'deck
 function drawnCount(){
   const all=Array.from({length:ST.seats},(_,i)=>i+1);
   const parts = two() ? [[0,all.filter(n=>n%2===1)],[1,all.filter(n=>n%2===0)]] : [[-1,all]];
-  return parts.reduce((sum,[t,list])=>{ const d=load(deckKey(t),null); return sum + (Array.isArray(d)&&d.length ? list.length-d.length : 0); },0);
+  return parts.reduce((sum,[t,list])=>sum+calledIn(t,list).length,0);
 }
 function drawnLeft(){ return ST.seats - drawnCount(); }
+/* 某一副牌裡已經叫過的號碼（沒有紀錄＝還沒開始；空陣列＝這一輪全部叫過） */
+function calledIn(t,list){ const d=load(deckKey(t),null); if(!Array.isArray(d)) return []; return list.filter(n=>!d.includes(n)); }
+function allSeats(){ return Array.from({length:ST.seats},(_,i)=>i+1); }
+function calledSet(){
+  const all=allSeats();
+  const parts = two() ? [[0,all.filter(n=>n%2===1)],[1,all.filter(n=>n%2===0)]] : [[-1,all]];
+  const S=new Set(); parts.forEach(([t,list])=>calledIn(t,list).forEach(n=>S.add(n))); return S;
+}
 /* 開始前問老師：接著抽，還是重新抽 */
 function askThenStart(){
   const n=drawnCount();
@@ -1676,9 +1719,9 @@ function askThenStart(){
     okText:'▶ 接著抽', onOk:()=>startGame(),
     extra:[{text:'🔄 重新抽', fn:()=>{ resetDecks(); startGame(); }}]});
 }
-function resetDecks(){ [-1,0,1].forEach(t=>{ const k=deckKey(t); store(k,[]); try{ localStorage.removeItem(KEY+k); }catch(e){} delete MEM[k]; }); }
+function resetDecks(){ [-1,0,1].forEach(t=>{ const k=deckKey(t); try{ localStorage.removeItem(KEY+k); }catch(e){} delete MEM[k]; }); paintSeatBtn(); }
 function seatDeck(){ let d=load(deckKey(),null); if(!Array.isArray(d)||!d.length) d=shuffle(seatList()); return d; }
-function drawSeat(){ const d=seatDeck(); let n=d.pop(); if(n===curSeat && d.length){ d.unshift(n); n=d.pop(); } store(deckKey(),d); return n; }
+function drawSeat(){ const d=seatDeck(); let n=d.pop(); if(n===curSeat && d.length){ d.unshift(n); n=d.pop(); } store(deckKey(),d); paintSeatBtn(); return n; }
 const pad2=n=>String(n).padStart(2,'0');
 const ROLL_MS=1200;
 
@@ -1736,6 +1779,93 @@ $('#photoIn').addEventListener('change',async e=>{
   const ok=await photoPut(k,url);
   if(!ok) dialog({title:'照片只能暫時顯示',msg:'這個瀏覽器不能儲存照片，重新開啟檔案後會恢復成插圖。',cancel:false});
 });
+
+
+/* ---------- 叫號表（老師用）：誰上台過、誰還沒；點號碼可指定上台、看紀錄、寫評語 ---------- */
+function logKey(){ return 'log_c'+ST.cls; }
+function getLog(){ const L=load(logKey(),null); return (L&&typeof L==='object')?L:{}; }
+function today(){ const d=new Date(); return (d.getMonth()+1)+'/'+d.getDate(); }
+function logAnswer(seat,q,ok){
+  const L=getLog(), id=Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  const r=L[seat]=L[seat]||{note:'',hist:[]};
+  r.hist.push({id,d:today(),t:q.t,ok}); if(r.hist.length>60) r.hist.shift();
+  store(logKey(),L); return id;
+}
+function unlogAnswer(seat,id){ const L=getLog(); const r=L[seat]; if(!r) return; r.hist=r.hist.filter(h=>h.id!==id); store(logKey(),L); }
+function paintSeatBtn(){
+  const b=$('#tbSeats'); if(!b) return;
+  const c=ST.caller ? drawnCount() : null;
+  b.innerHTML='<span class="ic">🙋</span>'+zy(TEXT.seatsBtn)+(c===null?'':`<span class="cnt">${c}/${ST.seats}</span>`);
+}
+function openSeats(){
+  if(cur==='game') hush();
+  paintSeats(); $('#seatPanel').classList.add('on');
+}
+function closeSeats(){ $('#seatPanel').classList.remove('on'); }
+function paintSeats(){
+  const S=calledSet(), L=getLog(), t=today();
+  const left=ST.seats-S.size;
+  $('#spTitle').textContent='🙋 第 '+ST.cls+' 班 叫號表';
+  $('#spSum').textContent = ST.caller ? `已上台 ${S.size} 人，還沒 ${left} 人` : '（目前設定為「不叫號」）';
+  $('#spGrid').innerHTML=allSeats().map(n=>{
+    const r=L[n], todayH=(r&&r.hist||[]).filter(h=>h.d===t);
+    const marks=todayH.slice(-4).map(h=>h.ok?'⭐':'💡').join('');
+    const cls=['seatb', (cur==='game'&&n===curSeat&&!answers[idx]&&!calling&&!rolling)?'now':(S.has(n)?'done':''), (r&&r.note)?'note':''].join(' ');
+    const tm = two() ? `<span class="tm">${TEAM_ICON[n%2===1?0:1]}</span>` : '';
+    return `<button class="${cls}" data-seat="${n}">${n}<small>${marks||'&nbsp;'}</small>${tm}</button>`;
+  }).join('');
+}
+$('#spGrid').addEventListener('click',e=>{ const b=e.target.closest('.seatb'); if(b) seatDetail(+b.dataset.seat); });
+$('#spClose').onclick=closeSeats;
+$('#tbSeats').onclick=()=>{ sfx('click'); openSeats(); };
+function seatDetail(n){
+  const L=getLog(), r=L[n]||{note:'',hist:[]};
+  const ok=r.hist.filter(h=>h.ok).length, ng=r.hist.length-ok;
+  const lines=r.hist.slice(-8).reverse().map(h=>`${h.d}　${h.ok?'⭐ 答對':'💡 答錯'}　${h.t.length>16?h.t.slice(0,16)+'…':h.t}`);
+  const S=calledSet();
+  const canCall = cur==='game' && ST.caller && round[idx] && !answers[idx] && !ending && !rolling && (!two() || (n%2===1?0:1)===act);
+  let msg = `${S.has(n)?'這一輪已經上台過 ✓':'這一輪還沒上台'}　｜　累計答對 ${ok} 次、答錯 ${ng} 次`;
+  if(lines.length) msg+='\n\n最近紀錄：\n'+lines.join('\n');
+  if(cur==='game' && ST.caller && two() && (n%2===1?0:1)!==act) msg+='\n\n（現在輪到'+TEXT.teamName[act]+'，'+n+' 號是'+TEXT.teamName[n%2===1?0:1]+'）';
+  dialog({title:`${n} 號`, msg, fields:[{label:'📝 評語（只存在這台電腦）',value:r.note||''}], okText:'儲存評語',
+    onOk:vals=>{ const L2=getLog(); const r2=L2[n]=L2[n]||{note:'',hist:[]}; r2.note=vals[0].trim(); store(logKey(),L2); paintSeats(); },
+    extra: canCall ? [{text:'🙋 請 '+n+' 號上台', fn:()=>{ const v=$('#dlgF0').value.trim(); const L2=getLog(); const r2=L2[n]=L2[n]||{note:'',hist:[]}; r2.note=v; store(logKey(),L2); closeSeats(); callThis(n); }}] : []});
+}
+/* 老師指定某個號碼上台（例如下課前讓還沒玩到的小朋友上來） */
+function callThis(n){
+  stopCalling();
+  const t = two() ? (n%2===1?0:1) : -1;
+  const d=load(deckKey(t),null);
+  if(Array.isArray(d)){ const i=d.indexOf(n); if(i>=0){ d.splice(i,1); store(deckKey(t),d); } }
+  else { const list = two() ? allSeats().filter(x=>(x%2===1?0:1)===t) : allSeats(); store(deckKey(t), shuffle(list.filter(x=>x!==n))); }
+  curSeat=n; const el=$('#caller'); el.style.display=''; el.classList.remove('rolling'); void el.offsetWidth; el.classList.add('land');
+  $('#clNum').textContent=pad2(n); $('#clTop').innerHTML=(two()?TEAM_ICON[act]:'🙋')+' '+zy(TEXT.caller); fitEl($('#clTop'),.024);
+  sfx('ding'); paintSeatBtn();
+  const tk=++qToken; reading=true; calling=false;
+  const go=()=>{ if(tk!==qToken) return; clearTimeout(readTimer); readTimer=setTimeout(()=>{ if(tk===qToken) reading=false; },300); };
+  readTimer=setTimeout(go,4000);
+  speak(`請${n}號上台。`, false, go);
+}
+function paintNextFirst(){
+  const el=$('#eNext'); if(!el) return;
+  if(!ST.caller){ el.innerHTML=''; return; }
+  const S=calledSet(), rest=allSeats().filter(n=>!S.has(n));
+  if(S.size===0){ el.innerHTML=''; return; }
+  if(!rest.length){ el.innerHTML='🙋 '+zy(TEXT.allDone); return; }
+  const show=rest.length>12 ? rest.slice(0,12).join('、')+'…' : rest.join('、');
+  el.innerHTML='🙋 '+zy(TEXT.nextFirst.replace('{s}',show));
+}
+/* 匯出這班的紀錄（Excel 可直接開啟的 CSV） */
+$('#spExport').onclick=()=>{
+  const L=getLog(), rows=[['班級','座號','日期','題目','結果','評語']];
+  allSeats().forEach(n=>{ const r=L[n]; if(!r) return;
+    if(!r.hist.length && r.note) rows.push(['第'+ST.cls+'班',n,'','','',r.note]);
+    r.hist.forEach((h,i)=>rows.push(['第'+ST.cls+'班',n,h.d,h.t,h.ok?'答對':'答錯',i===r.hist.length-1?(r.note||''):''])); });
+  if(rows.length===1){ dialog({title:'還沒有紀錄',msg:'這一班還沒有任何上台紀錄或評語。',cancel:false}); return; }
+  const csv='﻿'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  { const d=new Date(); a.download='meal-game_class'+pad2(ST.cls)+'_'+d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate())+'.csv'; } document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
+};
 
 /* ---------- 誇張的情緒特效 ---------- */
 function fxHide(){ const f=$('#fx'); if(!f) return; clearTimeout(fxT); f.className=''; f.innerHTML=''; stopFireworks(); }
@@ -1806,7 +1936,7 @@ function showEnd(reason){
   $('#eTitle').innerHTML=zy(title);
   $('#eGot').innerHTML=zy(TEXT.got.replace('{n}',n));
   $('#eStars').innerHTML=Array.from({length:Math.min(n,25)},(_,i)=>`<span style="animation-delay:${i*0.08}s">⭐</span>`).join('');
-  $('#eMsg').innerHTML=zy(TEXT.remind);
+  $('#eMsg').innerHTML=zy(TEXT.remind); paintNextFirst();
   requestAnimationFrame(fitAll);
   if(reason==='caught'){ sfx('gentle'); setTimeout(()=>{ if(cur==='end') speak('虎媽媽追上來了！沒關係，再挑戰一次！你是'+title+'！'); },800); }
   else { sfx('win'); confetti(); setTimeout(()=>{ if(cur==='end') speak((reason==='goal'?'我們到了！':'恭喜你！')+'你是'+title+'！給自己拍拍手！'); },900); }
@@ -1833,7 +1963,7 @@ function showEndTeams(reason){
   $('#eTitle').innerHTML=zy(title);
   $('#eGot').innerHTML=[0,1].map(i=>`${TEAM_ICON[i]}${zy(TEXT.teamName[i])} ⭐${starsOf(i)}`).join('　　');
   $('#eStars').innerHTML='';
-  $('#eMsg').innerHTML=zy(TEXT.remind);
+  $('#eMsg').innerHTML=zy(TEXT.remind); paintNextFirst();
   requestAnimationFrame(fitAll);
   sfx('win'); confetti();
   setTimeout(()=>{ if(cur==='end') speak((win<0?TEXT.tie:TEXT.teamWin.replace('{t}',TEXT.teamName[win]))+'給自己拍拍手！'); },900);
@@ -2003,7 +2133,10 @@ $('#tbHome').onclick=()=>{ sfx('click');
   if(cur==='game' && answers.some(Boolean)) dialog({title:'🏠 回到首頁？',msg:'這一輪的進度會清除。',okText:'回首頁',onOk:()=>show('home')});
   else show('home'); };
 document.addEventListener('keydown',e=>{
-  if($('#modal').classList.contains('on') || $('#dlg').classList.contains('on')) return;
+  if($('#dlg').classList.contains('on')) return;
+  if(e.key==='Escape' && $('#seatPanel').classList.contains('on')){ closeSeats(); return; }
+  if($('#modal').classList.contains('on') || $('#seatPanel').classList.contains('on')) return;
+  if(e.key==='s'||e.key==='S'){ openSeats(); return; }
   if(cur==='home' && e.key==='Enter'){ askThenStart(); return; }
   if(cur!=='game') return;
   if(e.key===' '){ e.preventDefault(); togglePause(); }
